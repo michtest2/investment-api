@@ -267,3 +267,46 @@ class PaymentAccountsView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# accounts/views.py
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            tokens = response.data
+            response = Response(
+                {
+                    "message": "Login successful",
+                    # "user": request.user.username,  # or any other user data you want to return
+                }
+            )
+
+            # Set cookies
+            response.set_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE"],
+                tokens["access"],
+                max_age=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds(),
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+                path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            )
+
+            response.set_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+                tokens["refresh"],
+                max_age=settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds(),
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+                path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            )
+        return response
