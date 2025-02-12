@@ -6,14 +6,15 @@ import uuid
 
 
 class User(AbstractUser):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
     groups = models.ManyToManyField(
         Group, related_name="custom_user_groups", blank=True
     )
     user_permissions = models.ManyToManyField(
         Permission, related_name="custom_user_permissions", blank=True
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True)
 
     # Add additional fields
     class AccountStatus(models.TextChoices):
