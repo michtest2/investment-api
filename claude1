@@ -173,3 +173,8 @@ urlpatterns = [
     "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczODg2Nzk2NywiaWF0IjoxNzM4NzgxNTY3LCJqdGkiOiIwODY5ZDFjODllZWI0NTUxODA2ZTE2OWE3ZDc4ZmViYiIsInVzZXJfaWQiOjJ9.c8Is4HehCwSWPm_nfP-WFx2ttJNZLTLTt-J2O0V2VZc",
     "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Nzg1MTY3LCJpYXQiOjE3Mzg3ODE1NjcsImp0aSI6IjgwYTQ4YjEzZjJhYzRjZTI5ZTFhYmQwOTBjMjZjMWRmIiwidXNlcl9pZCI6Mn0.FgawMMAddoWw46NZK1UFKBHSYZ6bTwQ_S4KskG0xnL0",
 }
+
+
+# docker redis
+# CELERY_BROKER_URL = "redis://host.docker.internal:6379/0"
+# CELERY_RESULT_BACKEND = "redis://host.docker.internal:6379/0"
