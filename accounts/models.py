@@ -97,3 +97,46 @@ class PaymentAccounts(models.Model):
     class Meta:
         verbose_name = "Payment Account"
         verbose_name_plural = "Payment Accounts"
+
+
+class AdminPaymentAccounts(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="admin_payment_account"
+    )
+    BTC_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Bitcoin Address"
+    )
+    ETH_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Ethereum Address"
+    )
+    LTC_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Litecoin Address"
+    )
+    BCH_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Bitcoin Cash Address"
+    )
+    XRP_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Ripple Address"
+    )
+    ADA_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Cardano Address"
+    )
+    DOT_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Polkadot Address"
+    )
+    SOL_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Solana Address"
+    )
+    DOGE_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Dogecoin Address"
+    )
+    USDT_address = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Tether Address"
+    )
+
+    def __str__(self):
+        return f"Payment Accounts for {self.user.username}"
+
+    class Meta:
+        verbose_name = "Admin Payment Account"
+        verbose_name_plural = "Admin Payment Accounts"

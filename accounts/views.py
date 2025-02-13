@@ -187,7 +187,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .models import User, PaymentAccounts
+from .models import User, PaymentAccounts, AdminPaymentAccounts
 from .serializers import UserSerializer, PaymentAccountsSerializer
 
 
@@ -310,3 +310,24 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
             )
         return response
+
+
+class AdminPaymentAccountsView(APIView):
+    permission_classes = [
+        IsAuthenticated
+    ]  # Only authenticated users can access this view
+
+    def get(self, request):
+        """
+        Retrieve admin payment account details.
+        """
+        # user = request.user
+        try:
+            payment_account = AdminPaymentAccounts.objects.all()
+            serializer = PaymentAccountsSerializer(payment_account, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except PaymentAccounts.DoesNotExist:
+            return Response(
+                {"detail": "Admin Payment account not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )

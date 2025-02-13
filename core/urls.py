@@ -38,20 +38,18 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/auth/register/", RegisterView.as_view(), name="register"),
+    path("api/v1/auth/register", RegisterView.as_view(), name="register"),
     # path("api/v1/auth/login/", TokenObtainPairView.as_view(), name="login"),
-    path("api/v1/auth/login/", CustomTokenObtainPairView.as_view(), name="login"),
+    path("api/v1/auth/login", CustomTokenObtainPairView.as_view(), name="login"),
+    path("api/v1/auth/login/refresh", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/v1/auth/logout", LogoutView.as_view(), name="logout"),
     path(
-        "api/v1/auth/login/refresh/", TokenRefreshView.as_view(), name="token_refresh"
-    ),
-    path("api/v1/auth/logout/", LogoutView.as_view(), name="logout"),
-    path(
-        "api/v1/auth/password/reset/",
+        "api/v1/auth/password/reset",
         PasswordResetView.as_view(),
         name="password_reset",
     ),
     path(
-        "api/v1/auth/password/reset/confirm/",
+        "api/v1/auth/password/reset/confirm",
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
