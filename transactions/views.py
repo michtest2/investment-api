@@ -78,7 +78,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import Deposit
-from .serializers import DepositSerializer
+from .serializers import DepositSerializer, DepositViewSerializer
 
 from dashboard.models import Dashboard
 
@@ -130,7 +130,7 @@ class PendingDepositsView(APIView):
     def get(self, request, *args, **kwargs):
         # Fetch pending deposits for the authenticated user
         pending_deposits = Deposit.objects.filter(user=request.user, status="pending")
-        serializer = DepositSerializer(pending_deposits, many=True)
+        serializer = DepositViewSerializer(pending_deposits, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -144,5 +144,5 @@ class DepositHistoryView(APIView):
     def get(self, request, *args, **kwargs):
         # Fetch all deposits for the authenticated user
         deposit_history = Deposit.objects.filter(user=request.user)
-        serializer = DepositSerializer(deposit_history, many=True)
+        serializer = DepositViewSerializer(deposit_history, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
