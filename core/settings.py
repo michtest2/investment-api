@@ -160,7 +160,7 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_SECURE": True,  # Only send cookies over HTTPS
     "AUTH_COOKIE_HTTP_ONLY": True,  # Protect cookies from JavaScript access
     "AUTH_COOKIE_PATH": "/",
-    "AUTH_COOKIE_SAMESITE": "Lax",
+    "AUTH_COOKIE_SAMESITE": "none",
 }
 AUTH_USER_MODEL = "accounts.User"
 
