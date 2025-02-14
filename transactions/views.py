@@ -19,17 +19,17 @@ class RequestWithdrawalView(APIView):
         # Get the authenticated user
         user = request.user
 
-        pending_withdrawal_exists = Withdrawal.objects.filter(
-            user=user, status="pending"
-        ).exists()
+        # pending_withdrawal_exists = Withdrawal.objects.filter(
+        #     user=user, status="pending"
+        # ).exists()
 
-        if pending_withdrawal_exists:
-            return Response(
-                {
-                    "detail": "A pending withdrawal request is still waiting for approval. Please wait until it is approved before creating a new withdrawal requeat."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # if pending_withdrawal_exists:
+        #     return Response(
+        #         {
+        #             "detail": "A pending withdrawal request is still waiting for approval. Please wait until it is approved before creating a new withdrawal requeat."
+        #         },
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
 
         # Validate and create the withdrawal
         serializer = WithdrawalSerializer(data=request.data, context={"user": user})
@@ -106,17 +106,17 @@ class CreateDepositView(APIView):
         # Check if the user has any pending deposit.
         # This assumes that the Deposit model is linked to a Transaction via a foreign key
         # and that a deposit is pending if its transaction's status is PENDING.
-        pending_deposit_exists = Deposit.objects.filter(
-            user=request.user, status="pending"
-        ).exists()
+        # pending_deposit_exists = Deposit.objects.filter(
+        #     user=request.user, status="pending"
+        # ).exists()
 
-        if pending_deposit_exists:
-            return Response(
-                {
-                    "detail": "A pending deposit is still waiting for approval. Please wait until it is approved before creating a new deposit."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # if pending_deposit_exists:
+        #     return Response(
+        #         {
+        #             "detail": "A pending deposit is still waiting for approval. Please wait until it is approved before creating a new deposit."
+        #         },
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
         # Pass the authenticated user as part of the context
         print(request.data["plan_name"])
         serializer = DepositSerializer(
