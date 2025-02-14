@@ -75,7 +75,7 @@ class DepositViewSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     # user = serializers.StringRelatedField()  # Display the user's string representation
     # transaction = TransactionSerializer()  # Display the transaction's data
-    #plan = serializers.SerializerMethodField()
+    plan = InvestmentPlanSerializer()
 
     class Meta:
         model = Deposit
@@ -95,9 +95,8 @@ class DepositViewSerializer(serializers.ModelSerializer):
         validated_data["user"] = self.context["user"]
         return super().create(validated_data)
 
-    #def get_plan(self, obj):
-       # plan = InvestmentPlan.objects.get(name=self.context["plan_name"])
-       # obj.plan = plan
-        #obj.save()
-       # return InvestmentPlanSerializer(plan).data["name"]
-        
+    # def get_plan(self, obj):
+    # plan = InvestmentPlan.objects.get(name=self.context["plan_name"])
+    # obj.plan = plan
+    # obj.save()
+    # return InvestmentPlanSerializer(plan).data["name"]

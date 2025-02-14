@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import AccountSettingsView, PaymentAccountsView, AdminPaymentAccountsView
+from .views import (
+    AccountSettingsView,
+    PaymentAccountsView,
+    AdminPaymentAccountsView,
+    MeView,
+)
 
 
 app_name = "accounts"
@@ -12,6 +17,7 @@ urlpatterns = [
         AdminPaymentAccountsView.as_view(),
         name="payment-account",
     ),
+    path("me/", MeView.as_view(), name="me"),
 ]
 
 # http://127.0.0.1:8000/api/v1/accounts/payment_account/admin

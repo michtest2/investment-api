@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # for accounts
+    "accounts.middleware.JWTRefreshMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # for cors
@@ -80,19 +82,19 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-DATABASE_URL = config("DATABASE_URL")
-default_db_config = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-
 DATABASES = {
-    "default": default_db_config,
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
+
+# DATABASE_URL = config("DATABASE_URL")
+# default_db_config = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+
+# DATABASES = {
+#     "default": default_db_config,
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -150,7 +152,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60 * 24),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -161,6 +163,7 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_HTTP_ONLY": True,  # Protect cookies from JavaScript access
     "AUTH_COOKIE_PATH": "/",
     "AUTH_COOKIE_SAMESITE": "none",
+    "SIGNING_KEY": SECRET_KEY,
 }
 AUTH_USER_MODEL = "accounts.User"
 

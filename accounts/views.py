@@ -60,20 +60,43 @@ class RegisterView(APIView):
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
+
+
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         try:
-            refresh_token = request.data["refresh_token"]
-            print(refresh_token)
-            token = RefreshToken(refresh_token)
-            print("ok1")
-            token.blacklist()
-            print("ok2")
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            # Get refresh token from cookie
+            refresh_token = request.COOKIES.get(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
+            )
+
+            if refresh_token:
+                # Blacklist the token
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+
+            response = Response(
+                {"message": "logout successful"}, status=status.HTTP_205_RESET_CONTENT
+            )
+
+            # Delete cookies
+            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
+            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
+
+            return response
+
+        except Exception as e:
+            return Response(
+                {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 import os
@@ -331,3 +354,19 @@ class AdminPaymentAccountsView(APIView):
                 {"detail": "Admin Payment account not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+# accounts/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .serializers import MeUserSerializer  # You'll need to create this
+
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = MeUserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
