@@ -67,7 +67,9 @@ def withdrawal_reviewed(sender, instance, created, **kwargs):
 
             # Increase total withdrawal
             dashboard.total_withdrawal = dashboard.total_withdrawal + instance.amount
-
+            dashboard.pending_withdrawal = (
+                dashboard.pending_withdrawal - instance.amount
+            )
             # Decrease account balance
             dashboard.account_balance = dashboard.account_balance - instance.amount
 

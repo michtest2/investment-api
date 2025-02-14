@@ -191,21 +191,66 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 from .models import PaymentAccounts
 
 
+# class PaymentAccountsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PaymentAccounts
+#         fields = [
+#             "id",
+#             "user",
+#             "BTC_address",
+#             "ETH_address",
+#             "LTC_address",
+#             "BCH_address",
+#             "XRP_address",
+#             "ADA_address",
+#             "DOT_address",
+#             "SOL_address",
+#             "DOGE_address",
+#             "USDT_address",
+#         ]
+#         read_only_fields = ["id", "user"]  # Ensure 'id' and 'user' are read-only
+
+from rest_framework import serializers
+from .models import PaymentAccounts
+
+
 class PaymentAccountsSerializer(serializers.ModelSerializer):
+    crypto_addresses = serializers.SerializerMethodField()
+
     class Meta:
         model = PaymentAccounts
+        # Only include id, user, and the new custom field in the output.
         fields = [
             "id",
             "user",
-            "BTC_address",
-            "ETH_address",
-            "LTC_address",
-            "BCH_address",
-            "XRP_address",
-            "ADA_address",
-            "DOT_address",
-            "SOL_address",
-            "DOGE_address",
-            "USDT_address",
+            "crypto_addresses",
         ]
-        read_only_fields = ["id", "user"]  # Ensure 'id' and 'user' are read-only
+        read_only_fields = ["id", "user"]
+
+    def get_crypto_addresses(self, obj):
+        # Define a mapping of your model field to a readable name and currency code.
+        crypto_fields = [
+            ("BTC_address", "Bitcoin", "BTC"),
+            ("ETH_address", "Ethereum", "ETH"),
+            ("LTC_address", "Litecoin", "LTC"),
+            ("BCH_address", "Bitcoin Cash", "BCH"),
+            ("XRP_address", "Ripple", "XRP"),
+            ("ADA_address", "Cardano", "ADA"),
+            ("DOT_address", "Polkadot", "DOT"),
+            ("SOL_address", "Solana", "SOL"),
+            ("DOGE_address", "Dogecoin", "DOGE"),
+            ("USDT_address", "Tether", "USDT"),
+        ]
+
+        addresses = []
+        for field, name, currency in crypto_fields:
+            address = getattr(obj, field, None)
+            if address:  # Only include if the address is not None or empty
+                addresses.append(
+                    {
+                        "name": name,
+                        "currency": currency,
+                        "address": address,
+                    }
+                )
+        return addresses

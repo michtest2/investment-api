@@ -246,6 +246,11 @@ class AccountSettingsView(APIView):
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            dashboard = Dashboard.objects.get(user=request.user)
+            print("data", serializer.data)
+            print("v data", serializer.validated_data)
+            dashboard.username = serializer.data["username"]
+            dashboard.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

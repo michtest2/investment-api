@@ -27,6 +27,7 @@ class InvestmentPlan(models.Model):
         auto_now_add=True
     )  # Automatically set on creation
     updated_at = models.DateTimeField(auto_now=True)  # Automatically updated on save
+    featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
