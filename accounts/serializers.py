@@ -94,7 +94,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_email_verified",
             "two_factor_enabled",
             "referral_code",
-            "referred_by",
+            # "referred_by",
             "preferred_language",
             "created_at",
             "updated_at",

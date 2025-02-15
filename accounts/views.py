@@ -21,18 +21,41 @@ from .models import PaymentAccounts
 from dashboard.serializers import DashboardSerializer
 from django.utils import timezone
 
+from referrals.models import Referral
+
 User = get_user_model()
+
+import uuid
+
+
+def generate_referral_code():
+    return str(uuid.uuid4())[:8]
 
 
 class RegisterView(APIView):
     def post(self, request):
+        try:
+            referral_code = request.data["referral_code"]
+            ref_user = User.objects.get(referral_code=referral_code)
+        except:
+            print("referral code not provided. continuing....")
+
         user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
             # Create user
             user = user_serializer.save()
             user.set_password(user_serializer.validated_data["password"])
-            user.save()
+            user.referral_code = generate_referral_code()
+            user = user.save()
 
+            if referral_code:
+                referral = Referral.objects.create(
+                    referrer=ref_user,
+                    referred_user=user,
+                    referral_code=referral_code,
+                    status="Active",
+                )
+            # c908a72a
             # Create dashboard
             dashboard = Dashboard.objects.create(
                 user=user,
@@ -86,6 +109,7 @@ class LogoutView(APIView):
             response = Response(
                 {"message": "logout successful"}, status=status.HTTP_205_RESET_CONTENT
             )
+            print(response)
 
             # Delete cookies
             response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])

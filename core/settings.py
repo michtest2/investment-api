@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "investments",
     "transactions",
     "dashboard",
+    "referrals",
     # 3rd party
     "rest_framework",
     "rest_framework_simplejwt",
