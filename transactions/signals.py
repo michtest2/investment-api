@@ -48,8 +48,8 @@ def deposit_reviewed(sender, instance, created, **kwargs):
 
             # update dashboard active_deposit and balance
             dashboard = Dashboard.objects.get(user=instance.user)
-            dashboard.active_deposit = dashboard.active_deposit - instance.amount
-            dashboard.account_balance = instance.amount
+            dashboard.active_deposit = 0  # dashboard.active_deposit - instance.amount
+            dashboard.account_balance += instance.amount
             dashboard.save()
 
         except Exception as e:
