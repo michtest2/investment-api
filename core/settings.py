@@ -159,7 +159,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_COOKIE": "access_token",  # Cookie name for access token
     "AUTH_COOKIE_REFRESH": "refresh_token",  # Cookie name for refresh token
-    "AUTH_COOKIE_DOMAIN": "https://investment-api-oobo.onrender.com",  # None  Change this in production
+    "AUTH_COOKIE_DOMAIN": "investment-api-oobo.onrender.com",  # None  Change this in production
     "AUTH_COOKIE_SECURE": True,  # Only send cookies over HTTPS
     "AUTH_COOKIE_HTTP_ONLY": True,  # Protect cookies from JavaScript access
     "AUTH_COOKIE_PATH": "/",
