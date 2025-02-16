@@ -147,21 +147,21 @@ class LogoutView(APIView):
             response = Response(
                 {"message": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT
             )
-            return response
-            # # Delete cookies with only domain and path
-            # response.delete_cookie(
-            #     settings.SIMPLE_JWT["AUTH_COOKIE"],
-            #     domain="investment-api-oobo.onrender.com",
-            #     path="/",
-            # )
-            # response.delete_cookie(
-            #     settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
-            #     domain="investment-api-oobo.onrender.com",
-            #     path="/",
-            # )
 
-            # print("Cookies deleted")  # Debug log
-            # return response
+            # Delete cookies with only domain and path
+            response.delete_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE"],
+                domain="investment-api-oobo.onrender.com",
+                path="/",
+            )
+            response.delete_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+                domain="investment-api-oobo.onrender.com",
+                path="/",
+            )
+
+            print("Cookies deleted")  # Debug log
+            return response
 
         except Exception as e:
             print("Logout error:", str(e))  # Debug log
