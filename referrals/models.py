@@ -11,7 +11,7 @@ class Referral(models.Model):
     referred_user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="referred_by2",
+        related_name="referred_bys",
         null=True,
         blank=True,
     )

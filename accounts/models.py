@@ -35,10 +35,10 @@ class User(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     two_factor_enabled = models.BooleanField(default=False)
     # account_balance = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    # referred_by = models.ForeignKey(
+    #      "self", on_delete=models.SET_NULL, related_name="temp_ref",blank=True, null=True
+    # )  # Optional
     referral_code = models.CharField(max_length=20, unique=True, blank=True, null=True)
-    referred_by = models.ForeignKey(
-         "self", on_delete=models.SET_NULL, related_name="temp_ref",blank=True, null=True
-    )  # Optional
     address = models.TextField(blank=True, null=True)
     preferred_language = models.CharField(max_length=10, default="en")
     created_at = models.DateTimeField(auto_now_add=True)
