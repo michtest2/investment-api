@@ -128,45 +128,40 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            # # Get refresh token from cookie
-            # refresh_token = request.COOKIES.get(
-            #     settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
-            # )
-
-            # print("Refresh token found:", bool(refresh_token))  # Debug log
-
-            # if refresh_token:
-            #     try:
-            #         # Blacklist the token
-            #         token = RefreshToken(refresh_token)
-            #         token.blacklist()
-            #         print("Token blacklisted successfully")  # Debug log
-            #     except Exception as e:
-            #         print("Token blacklist error:", str(e))  # Debug log
-
-            # response = Response(
-            #     {"message": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT
-            # )
-
-            # # Delete cookies with only domain and path
-            # response.delete_cookie(
-            #     settings.SIMPLE_JWT["AUTH_COOKIE"],
-            #     domain="investment-api-oobo.onrender.com",
-            #     path="/",
-            # )
-            # response.delete_cookie(
-            #     settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
-            #     domain="investment-api-oobo.onrender.com",
-            #     path="/",
-            # )
-
-            # print("Cookies deleted")  # Debug log
-            # return response
-            print("returning response ")
-            return Response(
-                {"message_temp": "Logout successful"},
-                status=status.HTTP_205_RESET_CONTENT,
+            # Get refresh token from cookie
+            refresh_token = request.COOKIES.get(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
             )
+
+            print("Refresh token found:", bool(refresh_token))  # Debug log
+
+            if refresh_token:
+                try:
+                    # Blacklist the token
+                    token = RefreshToken(refresh_token)
+                    token.blacklist()
+                    print("Token blacklisted successfully")  # Debug log
+                except Exception as e:
+                    print("Token blacklist error:", str(e))  # Debug log
+
+            response = Response(
+                {"message": "Logout successful"}, status=status.HTTP_200_OK
+            )
+
+            # Delete cookies with only domain and path
+            response.delete_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE"],
+                domain="investment-api-oobo.onrender.com",
+                path="/",
+            )
+            response.delete_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+                domain="investment-api-oobo.onrender.com",
+                path="/",
+            )
+
+            print("Cookies deleted")  # Debug log
+            return response
 
         except Exception as e:
             print("Logout error:", str(e))  # Debug log
