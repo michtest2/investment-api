@@ -162,6 +162,7 @@ class LogoutView(APIView):
 
             # print("Cookies deleted")  # Debug log
             # return response
+            print("returning response ")
             return Response(
                 {"message_temp": "Logout successful"},
                 status=status.HTTP_205_RESET_CONTENT,
