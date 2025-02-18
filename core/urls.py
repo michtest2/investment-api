@@ -60,6 +60,8 @@ urlpatterns = [
     # dashboard
     path("api/v1/dashboard/", include("dashboard.urls")),
     path("api/v1/accounts/", include("accounts.urls")),
+    # referrals
+    path("api/v1/referrals/", include("referrals.urls")),
     # Swagger UI
     path(
         "swagger/",

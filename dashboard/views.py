@@ -6,6 +6,7 @@ from django.utils import timezone
 from dashboard.models import Dashboard
 from investments.models import Investment
 from .serializers import DashboardSerializer
+from referrals.models import Referral
 
 
 class DashboardView(APIView):
@@ -37,7 +38,13 @@ class DashboardView(APIView):
                     investment.save(update_fields=["total_earned"])
 
                 total_earned += calculated_total_earned
+            # get all referrals buy user and total the commission earned
+            referrals = Referral.objects.filter(referrer=request.user)
+            total_commission_earned = 0
+            for referral in referrals:
+                total_commission_earned += referral.commission_earned
 
+            total_earned += total_commission_earned
             # Update dashboard
             if dashboard.earned_total < total_earned:
                 earned_difference = total_earned - dashboard.earned_total

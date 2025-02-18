@@ -11,11 +11,11 @@ class Referral(models.Model):
     referred_user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="referred_bys",
+        related_name="referred_by",
         null=True,
         blank=True,
     )
-    referral_code = models.CharField(max_length=50, unique=True)
+    referral_code = models.CharField(max_length=50)
     status = models.CharField(
         max_length=10,
         choices=[("Active", "Active"), ("Inactive", "Inactive")],
@@ -27,4 +27,4 @@ class Referral(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.referrer.username} refer {self.referred_user.username}-> {self.referral_code}"
+        return f"{self.referrer.username} refer {self.referred_user.username}-> {self.commission_earned}"

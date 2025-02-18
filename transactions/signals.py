@@ -5,6 +5,8 @@ from datetime import timedelta
 from .models import Deposit, Withdrawal
 from investments.models import Investment
 from dashboard.models import Dashboard
+from referrals.models import Referral
+from decimal import Decimal
 
 
 @receiver(post_save, sender=Deposit, dispatch_uid="deposit_reviewed")
@@ -45,11 +47,30 @@ def deposit_reviewed(sender, instance, created, **kwargs):
             if not instance.confirmation_time:
                 instance.confirmation_time = timezone.now()
                 instance.save(update_fields=["confirmation_time"])
-
+            try:
+                # Check if the user has a referrer
+                referral = Referral.objects.get(referred_user=instance.user)
+                # Calculate referral commission
+                commission = instance.amount * Decimal(7 / 100)
+                # Update the referrer's commission_earned
+                referral.commission_earned += commission
+                referral.save()
+                print(f"Referral commission added: {commission}")
+            except Exception as e:
+                print(f"Error getting referral: {str(e)}")
             # update dashboard active_deposit and balance
             dashboard = Dashboard.objects.get(user=instance.user)
             dashboard.active_deposit = 0  # dashboard.active_deposit - instance.amount
             dashboard.account_balance += instance.amount
+            # get dashboard of referrer
+            try:
+                referrer_dashboard = Dashboard.objects.get(user=referral.referrer)
+                referrer_dashboard.account_balance += commission
+                referrer_dashboard.earned_total += commission
+                referrer_dashboard.save()
+            except Exception as e:
+                print(f"Error getting referrer dashboard: {str(e)}")
+            # Save dashboard changes
             dashboard.save()
 
         except Exception as e:

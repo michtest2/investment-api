@@ -37,17 +37,24 @@ class RegisterView(APIView):
         try:
             referral_code = request.data["referral_code"]
             ref_user = User.objects.get(referral_code=referral_code)
+            print("referral code provided. continuing....")
         except:
+            referral_code = None
             print("referral code not provided. continuing....")
 
-        user_serializer = UserSerializer(data=request.data)
+        # set referral code to none
+        data = request.data.copy()
+        data["referral_code"] = None
+
+        user_serializer = UserSerializer(data=data)
         if user_serializer.is_valid():
             # Create user
             user = user_serializer.save()
             user.set_password(user_serializer.validated_data["password"])
             user.referral_code = generate_referral_code()
-            user = user.save()
+            user.save()
 
+            # create referral if referral code exists
             if referral_code:
                 referral = Referral.objects.create(
                     referrer=ref_user,

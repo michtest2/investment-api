@@ -12,11 +12,7 @@ class JWTRefreshMiddleware(MiddlewareMixin):
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
         access_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE"])
 
-        print("Refresh Token:", refresh_token)
-        print("Access Token:", access_token)
-
         if not refresh_token:
-            print("No refresh token found")
             return  # No way to refresh without refresh token
 
         try:
@@ -24,11 +20,9 @@ class JWTRefreshMiddleware(MiddlewareMixin):
             if access_token:
                 token = AccessToken(access_token)
                 token.check_exp()  # Raises TokenError if expired
-                print("Access token is still valid")
                 return  # Token is valid, no need to refresh
         except TokenError:
-            print("Access token expired, attempting to refresh...")
-
+            pass  # Access token is expired
         # Try refreshing the access token
         try:
             # Manually decode refresh token to check its validity
@@ -37,8 +31,6 @@ class JWTRefreshMiddleware(MiddlewareMixin):
                 settings.SIMPLE_JWT["SIGNING_KEY"],
                 algorithms=["HS256"],  # Adjust based on your JWT settings
             )
-            print("Decoded refresh token:", decoded)
-
             # Generate a new access token
             refresh = RefreshToken(refresh_token)
             new_access_token = str(refresh.access_token)
@@ -48,7 +40,7 @@ class JWTRefreshMiddleware(MiddlewareMixin):
 
             # Store new access token for response
             request.new_access_token = new_access_token
-            print("New access token issued via refresh token")
+            # print("New access token issued via refresh token")
         except jwt.ExpiredSignatureError:
             print("Refresh token is expired")
         except jwt.InvalidTokenError:
