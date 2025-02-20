@@ -119,9 +119,27 @@ class LogoutView(APIView):
             print(response)
 
             # Delete cookies
-            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
-            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
-
+            # response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
+            # response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
+            # set the cookies for access and refresh token on the response to empty strings
+            response.set_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE"],
+                "",
+                max_age=0,
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+                path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            )
+            response.set_cookie(
+                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+                "",
+                max_age=0,
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+                path=settings.SIMPLE_JWT["AUTH_COOKIE_PATH"],
+            )
             return response
 
         except Exception as e:
