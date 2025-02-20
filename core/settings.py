@@ -227,3 +227,23 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+
+# JAZZMIN_UI_TWEAKS = {
+#     "theme": "darkly",  # Try "cerulean", "cosmo", "cyborg", "darkly", etc.
+#     # "dark_mode_theme": "solar",
+#     "navbar_small_text": False,
+#     "body_small_text": False,
+#     "sidebar_nav_compact_style": False,
+# }
+
+JAZZMIN_SETTINGS = {
+    "site_title": "NextGen Investments",
+    "site_header": "NextGen Admin",
+    "site_brand": "NextGen",
+    "welcome_sign": "Welcome to NextGen Investments Admin Dashboard",
+    # "site_logo": "static/images/logo.png",  # Path to your logo
+    "copyright": "NextGen Investments Ltd",
+    "search_model": ["users.User", "investments.Investment"],  # Models to search
+    # "user_avatar": "profile.image",  # Field for user avatars
+}

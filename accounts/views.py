@@ -287,7 +287,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import User, PaymentAccounts, AdminPaymentAccounts
-from .serializers import UserSerializer, PaymentAccountsSerializer
+from .serializers import (
+    UserSerializer,
+    PaymentAccountsSerializer,
+    PaymentAccountsPutSerializer,
+)
 
 
 class AccountSettingsView(APIView):
@@ -364,7 +368,7 @@ class PaymentAccountsView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = PaymentAccountsSerializer(
+        serializer = PaymentAccountsPutSerializer(
             payment_account, data=request.data, partial=True
         )
         if serializer.is_valid():
