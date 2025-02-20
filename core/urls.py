@@ -37,6 +37,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    # path("jet/", include("jet.urls")),
+    # path("jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")),
     path("admin/", admin.site.urls),
     path("api/v1/auth/register", RegisterView.as_view(), name="register"),
     # path("api/v1/auth/login/", TokenObtainPairView.as_view(), name="login"),
