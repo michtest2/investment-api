@@ -98,38 +98,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 
 
-# class LogoutView(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request):
-#         try:
-#             # Get refresh token from cookie
-#             refresh_token = request.COOKIES.get(
-#                 settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
-#             )
-
-#             if refresh_token:
-#                 # Blacklist the token
-#                 token = RefreshToken(refresh_token)
-#                 token.blacklist()
-
-#             response = Response(
-#                 {"message": "logout successful"}, status=status.HTTP_205_RESET_CONTENT
-#             )
-#             print(response)
-
-#             # Delete cookies
-#             response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
-#             response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
-
-#             return response
-
-#         except Exception as e:
-#             return Response(
-#                 {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
-#             )
-
-
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -140,39 +108,71 @@ class LogoutView(APIView):
                 settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
             )
 
-            print("Refresh token found:", bool(refresh_token))  # Debug log
-
             if refresh_token:
-                try:
-                    # Blacklist the token
-                    token = RefreshToken(refresh_token)
-                    token.blacklist()
-                    print("Token blacklisted successfully")  # Debug log
-                except Exception as e:
-                    print("Token blacklist error:", str(e))  # Debug log
+                # Blacklist the token
+                token = RefreshToken(refresh_token)
+                token.blacklist()
 
             response = Response(
                 {"message": "Logout successful"}, status=status.HTTP_200_OK
             )
+            print(response)
 
-            # Delete cookies with only domain and path
-            response.delete_cookie(
-                settings.SIMPLE_JWT["AUTH_COOKIE"],
-                domain="investment-api-oobo.onrender.com",
-                path="/",
-            )
-            response.delete_cookie(
-                settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
-                domain="investment-api-oobo.onrender.com",
-                path="/",
-            )
+            # Delete cookies
+            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
+            response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
 
-            print("Cookies deleted")  # Debug log
             return response
 
         except Exception as e:
-            print("Logout error:", str(e))  # Debug log
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+# class LogoutView(APIView):
+#     permission_classes = (IsAuthenticated,)
+
+#     def post(self, request):
+#         try:
+#             # Get refresh token from cookie
+#             refresh_token = request.COOKIES.get(
+#                 settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"]
+#             )
+
+#             print("Refresh token found:", bool(refresh_token))  # Debug log
+
+#             if refresh_token:
+#                 try:
+#                     # Blacklist the token
+#                     token = RefreshToken(refresh_token)
+#                     token.blacklist()
+#                     print("Token blacklisted successfully")  # Debug log
+#                 except Exception as e:
+#                     print("Token blacklist error:", str(e))  # Debug log
+
+#             response = Response(
+#                 {"message": "Logout successful"}, status=status.HTTP_200_OK
+#             )
+
+#             # Delete cookies with only domain and path
+#             response.delete_cookie(
+#                 settings.SIMPLE_JWT["AUTH_COOKIE"],
+#                 domain="investment-api-oobo.onrender.com",
+#                 path="/",
+#             )
+#             response.delete_cookie(
+#                 settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+#                 domain="investment-api-oobo.onrender.com",
+#                 path="/",
+#             )
+
+#             print("Cookies deleted")  # Debug log
+#             return response
+
+#         except Exception as e:
+#             print("Logout error:", str(e))  # Debug log
+#             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 import os
