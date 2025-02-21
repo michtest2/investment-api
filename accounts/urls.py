@@ -4,6 +4,7 @@ from .views import (
     PaymentAccountsView,
     AdminPaymentAccountsView,
     MeView,
+    ChangePasswordView,
 )
 
 
@@ -11,6 +12,9 @@ app_name = "accounts"
 
 urlpatterns = [
     path("settings", AccountSettingsView.as_view(), name="account-settings"),
+    path(
+        "settings/change_password", ChangePasswordView.as_view(), name="change-password"
+    ),
     path("payment_account", PaymentAccountsView.as_view(), name="payment-account"),
     path(
         "payment_account/admin",

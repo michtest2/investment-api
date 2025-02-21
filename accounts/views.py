@@ -473,3 +473,43 @@ class MeView(APIView):
     def get(self, request):
         serializer = MeUserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.hashers import check_password
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        previous_password = request.data.get("previous_password")
+        password1 = request.data.get("password1")
+        password2 = request.data.get("password2")
+
+        if not previous_password or not password1 or not password2:
+            return Response(
+                {"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = request.user
+        if not check_password(previous_password, user.password):
+            return Response(
+                {"error": "Previous password is incorrect"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if password1 != password2:
+            return Response(
+                {"error": "New passwords do not match"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(password1)
+        user.save()
+        return Response(
+            {"message": "Password changed successfully"}, status=status.HTTP_200_OK
+        )
